@@ -13,6 +13,7 @@ app.use(express.json());
 
 // Routes
 app.use('/api/User', require('./Route/User'));
+app.use('/api/Room', require('./Route/Room'));
 
 // Start Server
 app.listen(port, () => {
