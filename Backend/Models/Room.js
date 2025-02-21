@@ -16,7 +16,7 @@ const RoomSchema = new mongoose.Schema({
     assignedGuestId: { type: String, default: null }, // Nullable, only required if booked
     housekeepingStatus: { 
         type: String, 
-        enum: ['Cleaned', 'Pendings'], 
+        enum: ['Cleaned', 'Pending'], 
         default: 'Cleaned' 
     },
     createdAt: { type: Date, default: Date.now }

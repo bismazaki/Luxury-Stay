@@ -14,6 +14,12 @@ app.use(express.json());
 // Routes
 app.use('/api/User', require('./Route/User'));
 app.use('/api/Room', require('./Route/Room'));
+app.use('/api/feedback', require('./Route/Feedback'));
+app.use('/api/housekeeping', require('./Route/Housekeeping'));
+app.use('/api/payment', require('./Route/Payment'));
+app.use('/api/report', require('./Route/Report'));
+app.use('/api/booking', require('./Route/Booking'));
+app.use('/api/billing', require('./Route/Billing'));
 
 // Start Server
 app.listen(port, () => {

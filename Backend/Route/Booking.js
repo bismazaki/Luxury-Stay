@@ -10,7 +10,7 @@ const router = express.Router();
  * @access  Public
  */
 router.post(
-    '/',
+    '/booking',
     [
         body('guestId').notEmpty().isMongoId().withMessage('Invalid guest ID'),
         body('roomId').notEmpty().isMongoId().withMessage('Invalid room ID'),
@@ -50,7 +50,7 @@ router.post(
  * @desc    Fetch all bookings
  * @access  Public
  */
-router.get('/', async (req, res) => {
+router.get('/get-booking', async (req, res) => {
     try {
         const bookings = await Booking.find().populate('guestId', 'name email').populate('roomId', 'roomNumber');
         res.status(200).json({ bookings });
@@ -64,21 +64,44 @@ router.get('/', async (req, res) => {
  * @desc    Cancel a booking
  * @access  Public
  */
-router.put('/:id/cancel', async (req, res) => {
+// router.put('/update:id/cancel', async (req, res) => {
+//     try {
+//         const booking = await Booking.findById(req.params.id);
+
+//         if (!booking) {
+//             return res.status(404).json({ message: "Booking not found" });
+//         }
+
+//         booking.status = "Cancelled";
+//         await booking.save();
+
+//         res.status(200).json({ message: "Booking cancelled successfully", booking });
+//     } catch (error) {
+//         res.status(500).json({ message: "Server error", error: error.message });
+//     }
+// });
+router.put('/update/:id/cancel', async (req, res) => {
     try {
+        const { checkOutDate, totalAmount } = req.body; // Get updated fields
+
         const booking = await Booking.findById(req.params.id);
 
         if (!booking) {
             return res.status(404).json({ message: "Booking not found" });
         }
 
-        booking.status = "Cancelled";
+        // Update the fields only if new values are provided
+        if (checkOutDate) booking.checkOutDate = checkOutDate;
+        if (totalAmount) booking.totalAmount = totalAmount;
+
+        booking.status = "Cancelled"; // Set status to Cancelled
         await booking.save();
 
-        res.status(200).json({ message: "Booking cancelled successfully", booking });
+        res.status(200).json({ message: "Booking updated & cancelled successfully", booking });
     } catch (error) {
         res.status(500).json({ message: "Server error", error: error.message });
     }
 });
+
 
 module.exports = router;

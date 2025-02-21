@@ -23,7 +23,7 @@ const housekeepingSchema = new mongoose.Schema({
   status: {
     type: String,
     enum: ["Pending", "In Progress", "Completed"],
-    default: "Pending",
+    default: "In Progress",
   },
   remarks: {
     type: String,

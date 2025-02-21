@@ -45,7 +45,7 @@ router.post(
 
 // PUT /api/rooms/:id - Update room details
 router.put(
-  "/:id",
+  "/updateroom:id",
   [
     body("roomType").optional().isIn(["Single", "Double", "Suite", "Deluxe"]),
     body("pricePerNight").optional().isNumeric(),
