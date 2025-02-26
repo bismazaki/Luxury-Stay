@@ -47,7 +47,7 @@ const Contact = () => {
                         </div>
                     </div>
                     <div className="col-md-9">
-                        <form className="row contact_form" action="contact_process.php" method="post" id="contactForm" novalidate="novalidate">
+                        <form className="row contact_form" action="contact_process.php" method="post" id="contactForm" noValidate="novalidate">
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <input type="text" className="form-control" id="name" name="name" placeholder="Enter your name"/>

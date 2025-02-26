@@ -169,12 +169,12 @@ button:focus {
   text-transform: uppercase;
   color: #fff;
   font-weight: 600;
-  background: #f3c300;
+  background: #03153a;
   padding: 5px 30px;
 }
 
 .theme_btn:before {
-  background: #f8b100;
+  background: #043d65;
 }
 
 .theme_btn:hover {
@@ -215,7 +215,7 @@ button:focus {
   -ms-transform: translateX(-100%);
   transform: translateX(-100%);
   z-index: -1;
-  background: #f8b100;
+  background: #041758;
   -webkit-transition: all 0.3s linear;
   -o-transition: all 0.3s linear;
   transition: all 0.3s linear;
@@ -246,8 +246,8 @@ button:focus {
 .book_now_btn {
   width: 100%;
   display: block;
-  background: #f3c300;
-  color: #222222;
+  background: #120252;
+  color: #f3f0f0;
   text-transform: uppercase;
   font-size: 14px;
   line-height: 30px;
@@ -292,7 +292,7 @@ body {
 }
 
 .header-top a:hover {
-  color: #f3c300;
+  color: #070b4b;
 }
 
 .header-top ul {
@@ -333,7 +333,7 @@ body {
 }
 
 .header-top .header-top-right .header-social a:hover {
-  color: #f3c300;
+  color: #150759;
 }
 
 .navbar {
@@ -363,7 +363,7 @@ body {
 }
 
 .navbar .menu_nav .nav-item:hover .nav-link, .navbar .menu_nav .nav-item.active .nav-link {
-  color: #52c5fd;
+  color: #14668e;
 }
 
 .navbar .menu_nav .nav-item.submenu {
@@ -450,7 +450,7 @@ body {
 
 .navbar .menu_nav .nav-item.submenu ul .nav-item:hover .nav-link {
   background: #f0f0f0;
-  color: #52c5fd;
+  color: #072e41a5;
 }
 
 @media (min-width: 992px) {
@@ -499,10 +499,53 @@ body {
 .navbar_fixed .header-top {
   display: none;
 }
+.navbar-toggler-icon {
+  filter: invert(1) !important; /* Ye white color ko blue ya black convert karega */
+  background-color: blue !important;
+}
 
 .navbar_fixed.header_two {
   background: rgba(34, 34, 34, 0.9);
 }
+
+.navbar-toggler {
+  background-color: blue !important;
+  border: 1px solid blue !important;
+}
+.navbar-toggler-icon svg {
+  fill: blue !important;
+}
+
+
+.navbar-toggler-icon {
+  background-image: none !important; /* Default Bootstrap icon ko hatane ke liye */
+  width: 30px;
+  height: 3px;
+  background-color: white !important; /* White lines inside the blue button */
+  display: block;
+  border-radius: 3px;
+  position: relative;
+}
+
+.navbar-toggler-icon::before,
+.navbar-toggler-icon::after {
+  content: "";
+  width: 30px;
+  height: 3px;
+  background-color: white !important;
+  display: block;
+  position: absolute;
+  left: 0;
+}
+
+.navbar-toggler-icon::before {
+  top: -10px;
+}
+
+.navbar-toggler-icon::after {
+  top: 10px;
+}
+
 
 /*---------------------------------------------------- */
 /*----------------------------------------------------*/
@@ -898,7 +941,7 @@ body {
 }
 
 .facilities_item .sec_h4 i {
-  color: #f3c300;
+  color: #293391;
   font-size: 24px;
   line-height: 38px;
   display: inline-block;
@@ -1005,7 +1048,7 @@ body {
 }
 
 .testimonial_slider .testimonial_item .star a {
-  color: #f3c300;
+  color: #100941;
   font-size: 14px;
 }
 
@@ -1026,7 +1069,7 @@ body {
 }
 
 .testimonial_slider .owl-dots .owl-dot.active {
-  background: #f3c300;
+  background: #050a44;
 }
 
 /*---------------------------------------------------- */
@@ -1086,7 +1129,7 @@ body {
 }
 
 .tags .tag_btn:before {
-  background: #f3c300;
+  background: #030443;
 }
 
 .tags .tag_btn + .tag_btn {
@@ -1152,7 +1195,7 @@ body {
 }
 
 .categories_post:hover .categories_details {
-  background: rgba(248, 182, 0, 0.85);
+  background: rgba(5, 3, 59, 0.85);
 }
 
 /*============ blog_left_sidebar css ==============*/
@@ -1247,7 +1290,7 @@ body {
 .blog_right_sidebar .widget_title {
   font-size: 18px;
   line-height: 25px;
-  background: #f3c300;
+  background: #060641;
   text-align: center;
   color: #fff;
   padding: 8px 0px;
@@ -1264,7 +1307,7 @@ body {
   padding-left: 20px;
   border-radius: 45px;
   z-index: 0;
-  background: #f3c300;
+  background: #10064b;
 }
 
 .blog_right_sidebar .search_widget .input-group .form-control.placeholder {
@@ -1457,7 +1500,7 @@ body {
 }
 
 .blog_right_sidebar .newsletter_widget .bbtns {
-  background: #f8b600;
+  background: #0b2263;
   color: #fff;
   font-size: 12px;
   line-height: 38px;
@@ -1489,7 +1532,7 @@ body {
 }
 
 .blog_right_sidebar .tag_cloud_widget ul li a:hover {
-  background: #f3c300;
+  background: #04043c;
   color: #fff;
 }
 
@@ -1519,7 +1562,7 @@ body {
 }
 
 .blog-pagination .page-item.active .page-link {
-  background-color: #f3c300;
+  background-color: #130e4a;
   border-color: transparent;
   color: #fff;
 }
@@ -1546,7 +1589,7 @@ body {
 .blog-pagination .page-link:hover {
   color: #fff;
   text-decoration: none;
-  background-color: #f3c300;
+  background-color: #130e4a;
   border-color: #eee;
 }
 
@@ -1786,7 +1829,7 @@ body {
 }
 
 .comments-area .btn-reply:hover {
-  background-color: #f3c300;
+  background-color: #130e4a;
   color: #fff;
 }
 
@@ -1879,7 +1922,7 @@ body {
   color: #fff;
   text-transform: uppercase;
   font-weight: 600;
-  background: #f8b600;
+  background: #0b0456;
   display: inline-block;
   padding: 7px 44px;
   -webkit-transition: all 0.2s linear;
@@ -1888,11 +1931,11 @@ body {
 }
 
 .comment-form .primary-btn:before {
-  background: #f3c300;
+  background: #04074b;
 }
 
 .comment-form .primary-btn:hover {
-  border-color: #f3c300 !important;
+  border-color: #0c044f !important;
   color: #fff  !important;
 }
 
@@ -1916,7 +1959,7 @@ body {
   top: 0;
   font-size: 20px;
   line-height: 24px;
-  color: #f3c300;
+  color: #12064b;
   font-weight: 600;
 }
 
@@ -2018,7 +2061,7 @@ body {
 .modal-message .modal-dialog .modal-content .modal-header h2 {
   display: block;
   text-align: center;
-  color: #f3c300;
+  color: #130e4a;
   padding-bottom: 10px;
   font-family: "Poppins", sans-serif;
 }
@@ -2055,30 +2098,30 @@ body {
 
 .sample-text-area p b {
   font-weight: bold;
-  color: #f3c300;
+  color: #1c0e59;
 }
 
 .sample-text-area p i {
-  color: #f3c300;
+  color: #190652;
   font-style: italic;
 }
 
 .sample-text-area p sup {
-  color: #f3c300;
+  color: #100a4b;
   font-style: italic;
 }
 
 .sample-text-area p sub {
-  color: #f3c300;
+  color: #130c46;
   font-style: italic;
 }
 
 .sample-text-area p del {
-  color: #f3c300;
+  color: #110a3b;
 }
 
 .sample-text-area p u {
-  color: #f3c300;
+  color: #1c0b46;
 }
 
 /*============== End Elements Area css ================*/
@@ -2223,12 +2266,12 @@ body {
 
 .link-border {
   background: transparent;
-  border: 1px solid #f3c300;
-  color: #f3c300;
+  border: 1px solid #130e4a;
+  color: #130e4a;
 }
 
 .link-border:before {
-  background: #f3c300;
+  background: #130e4a;
 }
 
 .radius {
@@ -3542,7 +3585,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .single-footer-widget ul li a:hover {
-  color: #f3c300;
+  color: #130e4a;
 }
 
 .single-footer-widget .instafeed {
@@ -3595,7 +3638,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .single-footer-widget .sub-btn {
-  background: #f3c300;
+  background: #130e4a;
   color: #fff;
   font-weight: 300;
   border-radius: 0;
@@ -3628,7 +3671,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .footer-bottom .footer-text a {
-  color: #f3c300;
+  color: #130e4a;
 }
 
 .footer-bottom .footer-social {
@@ -3646,7 +3689,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .footer-bottom .footer-social a:hover {
-  color: #f3c300;
+  color: #130e4a;
 }
 
 /*---------------------------------------------------- */

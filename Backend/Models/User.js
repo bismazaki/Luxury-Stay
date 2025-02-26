@@ -8,7 +8,7 @@ const UserSchema = new mongoose.Schema({
     phoneNumber: { type: String, required: true },
     role: { 
         type: String, 
-        enum: ['Admin', 'Manager', 'Receptionist', 'Housekeeping', 'Guest'], 
+        enum: ['Admin', 'Staff', 'Guest'], 
         required: true 
     },
     password: { type: String, required: true }, // Will be hashed before saving
