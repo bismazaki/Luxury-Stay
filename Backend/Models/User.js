@@ -9,7 +9,6 @@ const UserSchema = new mongoose.Schema({
     role: { 
         type: String, 
         enum: ['Admin', 'Staff', 'Guest'], 
-        required: true 
     },
     password: { type: String, required: true }, // Will be hashed before saving
     address: { type: String, required: function() { return this.role === 'Guest'; } }, // Only for Guests

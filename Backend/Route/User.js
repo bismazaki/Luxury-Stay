@@ -147,7 +147,7 @@ router.post(
     body("email", "Enter a valid email").isEmail(),
     body("password", "Password must be at least 5 characters").isLength({ min: 5 }),
     body("phoneNumber", "Enter a valid phone number").isLength({ min: 10 }),
-    body("role", "Role is required").isIn(["Admin", "Staff", "Guest"]),
+  
   ],
   async (req, res) => {
     const errors = validationResult(req);
