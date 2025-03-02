@@ -1,5 +1,4 @@
-<<<<<<< Updated upstream
-=======
+
 // import React, { useState } from "react";
 // import {
 //   Box,
@@ -272,4 +271,4 @@ const Register = () => {
 };
 
 export default Register;
->>>>>>> Stashed changes
+

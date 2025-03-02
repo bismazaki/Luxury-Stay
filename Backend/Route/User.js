@@ -134,24 +134,24 @@
 //  router.get("/getusers", async (req, res) => {
 //     try {
 //       const { role, email } = req.query; // Query params for filtering
-  
+
 //       let query = {};
 //       if (role) query.role = role;
 //       if (email) query.email = email;
-  
+
 //       const users = await User.find(query).select("-password"); // Exclude password
-  
+
 //       if (users.length === 0) {
 //         return res.status(404).json({ message: "No users found" });
 //       }
-  
+
 //       res.status(200).json(users);
 //     } catch (error) {
 //       console.error("Error fetching users:", error);
 //       res.status(500).json({ error: "Internal Server Error" });
 //     }
 //   });
-  
+
 
 // module.exports = router;
 
@@ -174,7 +174,7 @@ router.post(
     body("email", "Enter a valid email").isEmail(),
     body("password", "Password must be at least 5 characters").isLength({ min: 5 }),
     body("phoneNumber", "Enter a valid phone number").isLength({ min: 10 }),
-  
+
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -214,6 +214,62 @@ router.post(
 );
 
 // 🔹 User Login Route
+
+// router.post(
+//   "/login",
+//   [
+//     body("email", "Enter a valid email").isEmail(),
+//     body("password", "Password cannot be empty").exists(),
+//   ],
+//   async (req, res) => {
+//     const errors = validationResult(req);
+//     if (!errors.isEmpty()) {
+//       return res.status(400).json({ errors: errors.array() });
+//     }
+
+//     try {
+//       const { email, password } = req.body;
+
+//       // Check if user exists
+//       let user = await User.findOne({ email });
+//       if (!user) {
+//         return res.status(400).json({ error: "Invalid Email" });
+//       }
+
+//       // Compare password
+//       const isMatch = await bcrypt.compare(password, user.password);
+//       if (!isMatch) {
+//         return res.status(400).json({ error: "Invalid Credentials" });
+//       }
+
+//       // Create JWT payload
+//       const payload = {
+//         user: {
+//           id: user.id,
+//           name: user.name,
+//           role: user.role, // Include user role in JWT
+//         },
+//       };
+
+//       // Generate JWT token
+//       const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });
+
+//       // ✅ Add role in response
+//       res.status(200).json({
+//         message: "Login successful",
+//         token,
+//         userId: user.userId, // Keep userId
+//         name: user.name, // Store name directly
+//         email: user.email,
+//         role: user.role // 👈 yeh role frontend me mil jayega
+//       });
+
+//     } catch (error) {
+//       console.error("Login Error:", error);
+//       res.status(500).json({ error: "Internal Server Error" });
+//     }
+//   }
+// );
 router.post(
   "/login",
   [
@@ -241,24 +297,35 @@ router.post(
         return res.status(400).json({ error: "Invalid Credentials" });
       }
 
-      // Create JWT payload
+      // ✅ Create JWT payload with name
       const payload = {
         user: {
           id: user.id,
-          role: user.role, // Include user role in JWT
+          name: user.name, // ✅ Now name will be available in the frontend
+          role: user.role,
         },
       };
 
       // Generate JWT token
       const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });
 
-      res.status(200).json({ message: "Login successful", token });
+      // ✅ Return full user data
+      res.status(200).json({
+        message: "Login successful",
+        token,
+        userId: user.userId,
+        name: user.name, // ✅ Keep this for quick access
+        email: user.email,
+        role: user.role,
+      });
+
     } catch (error) {
       console.error("Login Error:", error);
       res.status(500).json({ error: "Internal Server Error" });
     }
   }
 );
+
 
 // 🔹 Protected Route: Get All Users (Only Admins Can Access)
 router.get("/getusers-admin", fetchUser, authorizeRoles("Admin"), async (req, res) => {
@@ -288,27 +355,27 @@ router.get("/dashboard", fetchUser, authorizeRoles("Admin", "Manager"), (req, re
 });
 
 // GET all users
- router.get("/getusers", async (req, res) => {
-    try {
-      const { role, email } = req.query; // Query params for filtering
-  
-      let query = {};
-      if (role) query.role = role;
-      if (email) query.email = email;
-  
-      const users = await User.find(query).select("-password"); // Exclude password
-  
-      if (users.length === 0) {
-        return res.status(404).json({ message: "No users found" });
-      }
-  
-      res.status(200).json(users);
-    } catch (error) {
-      console.error("Error fetching users:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+router.get("/getusers", async (req, res) => {
+  try {
+    const { role, email } = req.query; // Query params for filtering
+
+    let query = {};
+    if (role) query.role = role;
+    if (email) query.email = email;
+
+    const users = await User.find(query).select("-password"); // Exclude password
+
+    if (users.length === 0) {
+      return res.status(404).json({ message: "No users found" });
     }
-  });
-  
+
+    res.status(200).json(users);
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 
 // 🔹 Admin Login Route (Hidden)
 router.post(
