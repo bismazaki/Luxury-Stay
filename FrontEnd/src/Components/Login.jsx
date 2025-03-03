@@ -30,37 +30,6 @@ const Login = () => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value });
   };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     const response = await fetch("http://localhost:2000/api/User/login", {
-  //       method: "POST",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify(credentials),
-  //     });
-  
-  //     const data = await response.json();
-  //     console.log("API Response:", data); // ✅ Debugging ke liye
-  
-  //     if (!response.ok) throw new Error(data.error || "Login failed");
-  
-  //     if (data.role === "Guest") { // ✅ Ab data.role mil raha hai
-  //       toast.success("Login Successful!", { position: "top-center" });
-  //       setTimeout(() => {
-  //         navigate("/");
-  //       }, 2000);
-  //     } else {
-  //       toast.warning("Unauthorized Role! Redirecting...", { position: "top-center" });
-  //       setTimeout(() => {
-  //         navigate("/");
-  //       }, 2000);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error:", error);
-  //     toast.error("Invalid Credentials. Please try again.", { position: "top-center" });
-  //   }
-  // };
-  
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {

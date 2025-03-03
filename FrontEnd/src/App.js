@@ -10,6 +10,10 @@ import Home from "./Components/Home";
 import Login from "./Components/Login";
 import Register from "./Components/Register";
 import Dashboard from "./Components/Dashboard";
+import Logindashboard from "./Components/Protected/Logindashboard";
+import Registerdashboard from "./Components/Protected/Register";
+import Admindashboard from "./Components/Protected/Admindashboard";
+import Staffdashboard from "./Components/Protected/Staffdashboard";
 
 function App() {
   return (
@@ -26,6 +30,10 @@ function App() {
           <Route path="/login" element={<Login/>} />
           <Route path="/register" element={<Register/>} />
           <Route path="/dashboard" element={<Dashboard/>}/>
+          <Route path="/logindashboard" element= {<Logindashboard/>}/>
+          <Route path="/Registerdashboard" element= {<Registerdashboard/>}/>
+          <Route path="/admin-dashboard" element= {<Admindashboard/>}/>
+          <Route path="/staff-dashboard" element= {<Staffdashboard/>}/>
         </Routes>
         
         <Footer />
