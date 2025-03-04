@@ -167,51 +167,6 @@ const authorizeRoles = require("../Middleware/authorizeRoles");
 const JWT_SECRET = "I@mgoodgirl"; // Use a strong secret key
 
 // 🔹 Register User Route
-// router.post(
-//   "/register",
-//   [
-//     body("name", "Enter a valid name").isLength({ min: 3 }),
-//     body("email", "Enter a valid email").isEmail(),
-//     body("password", "Password must be at least 5 characters").isLength({ min: 5 }),
-//     body("phoneNumber", "Enter a valid phone number").isLength({ min: 10 }),
-
-//   ],
-//   async (req, res) => {
-//     const errors = validationResult(req);
-//     if (!errors.isEmpty()) {
-//       return res.status(400).json({ errors: errors.array() });
-//     }
-
-//     try {
-//       const { name, email, password, phoneNumber, role, address, preferences } = req.body;
-
-//       let existingUser = await User.findOne({ email });
-//       if (existingUser) {
-//         return res.status(400).json({ error: "User with this email already exists" });
-//       }
-
-//       const userId = Math.random().toString(36).substr(2, 9);
-
-//       // 🟢 Save the raw password, Mongoose will hash it automatically
-//       const newUser = new User({
-//         userId,
-//         name,
-//         email,
-//         phoneNumber,
-//         role,
-//         password,
-//         address: role === "Guest" ? address : null,
-//         preferences: role === "Guest" ? preferences : null,
-//       });
-
-//       await newUser.save();
-//       res.status(201).json({ message: "User registered successfully" });
-//     } catch (error) {
-//       console.error(error.message);
-//       res.status(500).json({ error: "Internal Server Error" });
-//     }
-//   }
-// );
 
 router.post(
   "/register",
