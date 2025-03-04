@@ -43,7 +43,7 @@ const Register = () => {
   
         if (!response.ok) throw new Error("Registration failed");
   
-        toast.success("Registration Successful! Redirecting to login...", {
+        toast.success("Registration Successful! waiting for Admin response...", {
           position: "top-center",
         });
   
