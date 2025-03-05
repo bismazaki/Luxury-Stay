@@ -222,62 +222,6 @@ router.post(
 
 
 // Login Route
-// router.post(
-//   "/login",
-//   [
-//     body("email", "Enter a valid email").isEmail(),
-//     body("password", "Password cannot be empty").exists(),
-//   ],
-//   async (req, res) => {
-//     const errors = validationResult(req);
-//     if (!errors.isEmpty()) {
-//       return res.status(400).json({ errors: errors.array() });
-//     }
-
-//     try {
-//       const { email, password } = req.body;
-
-//       let user = await User.findOne({ email });
-//       if (!user) {
-//         return res.status(400).json({ error: "Invalid Email" });
-//       }
-
-//       // ✅ Staff users ka account agar inactive ho, toh login deny kare
-//       if (user.role === "Staff" && user.accountStatus === "Inactive") {
-//         return res.status(403).json({ error: "Waiting for admin to respond." });
-//       }
-
-//       const isMatch = await bcrypt.compare(password, user.password);
-//       if (!isMatch) {
-//         return res.status(400).json({ error: "Invalid Credentials" });
-//       }
-
-//       const payload = {
-//         user: {
-//           id: user.id,
-//           name: user.name, // ✅ Frontend ke liye name bhejna
-//           role: user.role,
-//         },
-//       };
-
-//       const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });
-
-//       res.status(200).json({
-//         message: "Login successful",
-//         token,
-//         userId: user.userId,
-//         name: user.name,
-//         email: user.email,
-//         role: user.role,
-//       });
-
-//     } catch (error) {
-//       console.error("Login Error:", error);
-//       res.status(500).json({ error: "Internal Server Error" });
-//     }
-//   }
-// );
-
 router.post(
   "/login",
   [
@@ -292,13 +236,13 @@ router.post(
 
     try {
       const { email, password } = req.body;
-      let user = await User.findOne({ email });
 
+      let user = await User.findOne({ email });
       if (!user) {
         return res.status(400).json({ error: "Invalid Email" });
       }
 
-      // ✅ Agar staff ka account inactive hai, toh login deny karo
+      // ✅ Staff users ka account agar inactive ho, toh login deny kare
       if (user.role === "Staff" && user.accountStatus === "Inactive") {
         return res.status(403).json({ error: "Waiting for admin to respond." });
       }
@@ -308,23 +252,15 @@ router.post(
         return res.status(400).json({ error: "Invalid Credentials" });
       }
 
-      // ✅ Alag alag token payloads for different roles
-      let payload = {
+      const payload = {
         user: {
           id: user.id,
-          name: user.name,
+          name: user.name, // ✅ Frontend ke liye name bhejna
           role: user.role,
         },
       };
 
-      let token;
-      if (user.role === "Admin") {
-        token = jwt.sign(payload, JWT_SECRET, { expiresIn: "2h" }); // Admin ke liye 2 hours expiry
-      } else if (user.role === "Staff") {
-        token = jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" }); // Staff ke liye 1 hour expiry
-      } else {
-        token = jwt.sign(payload, JWT_SECRET, { expiresIn: "30m" }); // Guest ke liye 30 minutes expiry
-      }
+      const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });
 
       res.status(200).json({
         message: "Login successful",
@@ -341,6 +277,70 @@ router.post(
     }
   }
 );
+
+// router.post(
+//   "/login",
+//   [
+//     body("email", "Enter a valid email").isEmail(),
+//     body("password", "Password cannot be empty").exists(),
+//   ],
+//   async (req, res) => {
+//     const errors = validationResult(req);
+//     if (!errors.isEmpty()) {
+//       return res.status(400).json({ errors: errors.array() });
+//     }
+
+//     try {
+//       const { email, password } = req.body;
+//       let user = await User.findOne({ email });
+
+//       if (!user) {
+//         return res.status(400).json({ error: "Invalid Email" });
+//       }
+
+//       // ✅ Agar staff ka account inactive hai, toh login deny karo
+//       if (user.role === "Staff" && user.accountStatus === "Inactive") {
+//         return res.status(403).json({ error: "Waiting for admin to respond." });
+//       }
+
+//       const isMatch = await bcrypt.compare(password, user.password);
+//       if (!isMatch) {
+//         return res.status(400).json({ error: "Invalid Credentials" });
+//       }
+
+//       // ✅ Alag alag token payloads for different roles
+//       let payload = {
+//         user: {
+//           id: user.id,
+//           name: user.name,
+//           role: user.role,
+//         },
+//       };
+
+//       let token;
+//       if (user.role === "Admin") {
+//         token = jwt.sign(payload, JWT_SECRET, { expiresIn: "2h" }); // Admin ke liye 2 hours expiry
+//       } else if (user.role === "Staff") {
+//         token = jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" }); // Staff ke liye 1 hour expiry
+//       } else {
+//         token = jwt.sign(payload, JWT_SECRET, { expiresIn: "30m" }); // Guest ke liye 30 minutes expiry
+//       }
+
+//       res.status(200).json({
+//         message: "Login successful",
+//         token,
+//         userId: user.userId,
+//         name: user.name,
+//         email: user.email,
+//         role: user.role,
+//       });
+
+//     } catch (error) {
+//       console.error("Login Error:", error);
+//       res.status(500).json({ error: "Internal Server Error" });
+//     }
+//   }
+// );
 
 
 // 🔹 User Login Route
