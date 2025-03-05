@@ -222,6 +222,62 @@ router.post(
 
 
 // Login Route
+// router.post(
+//   "/login",
+//   [
+//     body("email", "Enter a valid email").isEmail(),
+//     body("password", "Password cannot be empty").exists(),
+//   ],
+//   async (req, res) => {
+//     const errors = validationResult(req);
+//     if (!errors.isEmpty()) {
+//       return res.status(400).json({ errors: errors.array() });
+//     }
+
+//     try {
+//       const { email, password } = req.body;
+
+//       let user = await User.findOne({ email });
+//       if (!user) {
+//         return res.status(400).json({ error: "Invalid Email" });
+//       }
+
+//       // ✅ Staff users ka account agar inactive ho, toh login deny kare
+//       if (user.role === "Staff" && user.accountStatus === "Inactive") {
+//         return res.status(403).json({ error: "Waiting for admin to respond." });
+//       }
+
+//       const isMatch = await bcrypt.compare(password, user.password);
+//       if (!isMatch) {
+//         return res.status(400).json({ error: "Invalid Credentials" });
+//       }
+
+//       const payload = {
+//         user: {
+//           id: user.id,
+//           name: user.name, // ✅ Frontend ke liye name bhejna
+//           role: user.role,
+//         },
+//       };
+
+//       const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });
+
+//       res.status(200).json({
+//         message: "Login successful",
+//         token,
+//         userId: user.userId,
+//         name: user.name,
+//         email: user.email,
+//         role: user.role,
+//       });
+
+//     } catch (error) {
+//       console.error("Login Error:", error);
+//       res.status(500).json({ error: "Internal Server Error" });
+//     }
+//   }
+// );
+
 router.post(
   "/login",
   [
@@ -236,13 +292,13 @@ router.post(
 
     try {
       const { email, password } = req.body;
-
       let user = await User.findOne({ email });
+
       if (!user) {
         return res.status(400).json({ error: "Invalid Email" });
       }
 
-      // ✅ Staff users ka account agar inactive ho, toh login deny kare
+      // ✅ Agar staff ka account inactive hai, toh login deny karo
       if (user.role === "Staff" && user.accountStatus === "Inactive") {
         return res.status(403).json({ error: "Waiting for admin to respond." });
       }
@@ -252,15 +308,23 @@ router.post(
         return res.status(400).json({ error: "Invalid Credentials" });
       }
 
-      const payload = {
+      // ✅ Alag alag token payloads for different roles
+      let payload = {
         user: {
           id: user.id,
-          name: user.name, // ✅ Frontend ke liye name bhejna
+          name: user.name,
           role: user.role,
         },
       };
 
-      const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });
+      let token;
+      if (user.role === "Admin") {
+        token = jwt.sign(payload, JWT_SECRET, { expiresIn: "2h" }); // Admin ke liye 2 hours expiry
+      } else if (user.role === "Staff") {
+        token = jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" }); // Staff ke liye 1 hour expiry
+      } else {
+        token = jwt.sign(payload, JWT_SECRET, { expiresIn: "30m" }); // Guest ke liye 30 minutes expiry
+      }
 
       res.status(200).json({
         message: "Login successful",
@@ -277,8 +341,6 @@ router.post(
     }
   }
 );
-
-
 
 
 // 🔹 User Login Route
@@ -338,61 +400,61 @@ router.post(
 //     }
 //   }
 // );
-router.post(
-  "/login",
-  [
-    body("email", "Enter a valid email").isEmail(),
-    body("password", "Password cannot be empty").exists(),
-  ],
-  async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
+// router.post(
+//   "/login",
+//   [
+//     body("email", "Enter a valid email").isEmail(),
+//     body("password", "Password cannot be empty").exists(),
+//   ],
+//   async (req, res) => {
+//     const errors = validationResult(req);
+//     if (!errors.isEmpty()) {
+//       return res.status(400).json({ errors: errors.array() });
+//     }
 
-    try {
-      const { email, password } = req.body;
+//     try {
+//       const { email, password } = req.body;
 
-      // Check if user exists
-      let user = await User.findOne({ email });
-      if (!user) {
-        return res.status(400).json({ error: "Invalid Email" });
-      }
+//       // Check if user exists
+//       let user = await User.findOne({ email });
+//       if (!user) {
+//         return res.status(400).json({ error: "Invalid Email" });
+//       }
 
-      // Compare password
-      const isMatch = await bcrypt.compare(password, user.password);
-      if (!isMatch) {
-        return res.status(400).json({ error: "Invalid Credentials" });
-      }
+//       // Compare password
+//       const isMatch = await bcrypt.compare(password, user.password);
+//       if (!isMatch) {
+//         return res.status(400).json({ error: "Invalid Credentials" });
+//       }
 
-      // ✅ Create JWT payload with name
-      const payload = {
-        user: {
-          id: user.id,
-          name: user.name, // ✅ Now name will be available in the frontend
-          role: user.role,
-        },
-      };
+//       // ✅ Create JWT payload with name
+//       const payload = {
+//         user: {
+//           id: user.id,
+//           name: user.name, // ✅ Now name will be available in the frontend
+//           role: user.role,
+//         },
+//       };
 
-      // Generate JWT token
-      const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });
+//       // Generate JWT token
+//       const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });
 
-      // ✅ Return full user data
-      res.status(200).json({
-        message: "Login successful",
-        token,
-        userId: user.userId,
-        name: user.name, // ✅ Keep this for quick access
-        email: user.email,
-        role: user.role,
-      });
+//       // ✅ Return full user data
+//       res.status(200).json({
+//         message: "Login successful",
+//         token,
+//         userId: user.userId,
+//         name: user.name, // ✅ Keep this for quick access
+//         email: user.email,
+//         role: user.role,
+//       });
 
-    } catch (error) {
-      console.error("Login Error:", error);
-      res.status(500).json({ error: "Internal Server Error" });
-    }
-  }
-);
+//     } catch (error) {
+//       console.error("Login Error:", error);
+//       res.status(500).json({ error: "Internal Server Error" });
+//     }
+//   }
+// );
 
 
 // 🔹 Protected Route: Get All Users (Only Admins Can Access)

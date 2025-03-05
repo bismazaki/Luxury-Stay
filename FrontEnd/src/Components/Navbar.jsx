@@ -147,7 +147,7 @@ const Navbar = () => {
   const { userInitial, token, userRole, handleLogout } = useContext(AuthContext);
   const [scrolled, setScrolled] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-
+  console.log("userinitial" , userInitial);
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
@@ -197,30 +197,57 @@ const Navbar = () => {
               <li className="nav-item">
                 <Link className="nav-link" to="/contact">Contact</Link>
               </li>
-              <li className="nav-item mx-3 my-4 position-relative">
+              {/* <li className="nav-item mx-3 my-4 position-relative">
                 {token ? (
-                  <>
-                    {userRole !== "admin" && ( // ✅ Only show userInitial for non-admins
-                      <div
-                        className="user-circle"
-                        onClick={() => setDropdownOpen(!dropdownOpen)}
-                      >
+                  userRole === "Guest" && userInitial ? ( 
+                    <>
+                      <div className="user-circle" onClick={() => setDropdownOpen(!dropdownOpen)}>
                         {userInitial}
                       </div>
-                    )}
-                    {dropdownOpen && token && (
-                      <div className="dropdown-menu show">
-                        <Link className="dropdown-item" to="/profile">Show Profile</Link>
-                        <button className="dropdown-item" onClick={handleLogout}>Logout</button>
-                      </div>
-                    )}
-                  </>
+                      {dropdownOpen && (
+                        <div className="dropdown-menu show">
+                          <Link className="dropdown-item" to="/profile">Show Profile</Link>
+                          <button className="dropdown-item" onClick={handleLogout}>Logout</button>
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <Link className="nav-link mx-3 my-1" to="/login">
+                      <IoPersonSharp size={20} />
+                    </Link>
+                  )
                 ) : (
                   <Link className="nav-link mx-3 my-1" to="/login">
                     <IoPersonSharp size={20} />
                   </Link>
                 )}
-              </li>
+              </li> */}
+              <li className="nav-item mx-3 my-4 position-relative">
+  {token ? ( 
+    userRole === "guest" && userInitial ? ( 
+      <>
+        <div className="user-circle" onClick={() => setDropdownOpen(!dropdownOpen)}>
+          {userInitial}
+        </div>
+        {dropdownOpen && (
+          <div className="dropdown-menu show">
+            <Link className="dropdown-item" to="/profile">Show Profile</Link>
+            <button className="dropdown-item" onClick={handleLogout}>Logout</button>
+          </div>
+        )}
+      </>
+    ) : (
+      <Link className="nav-link mx-3 my-1" to="/login">
+        <IoPersonSharp size={20} />
+      </Link>
+    )
+  ) : (
+    <Link className="nav-link mx-3 my-1" to="/login">
+      <IoPersonSharp size={20} />
+    </Link>
+  )}
+</li>
+
             </ul>
           </div>
         </nav>
@@ -276,3 +303,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
