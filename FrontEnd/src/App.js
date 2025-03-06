@@ -1,30 +1,37 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation, Outlet } from "react-router-dom";
+import PrivateRoute from "./Components/Protected/Private";
 import Navbar from "./Components/Navbar";
+import Footer from "./Components/Footer";
+import Home from "./Components/Home";
 import About from "./Components/About";
 import Room from "./Components/Room";
 import Contact from "./Components/Contact";
-import Footer from "./Components/Footer";
-import Home from "./Components/Home";
 import Login from "./Components/Login";
 import Register from "./Components/Register";
 import Dashboard from "./Components/Dashboard";
 import Logindashboard from "./Components/Protected/Logindashboard";
 import Registerdashboard from "./Components/Protected/Register";
-import Staffdashboard from "./Components/Protected/Staffdashboard";
-import Staffrequest from "./Components/Protected/Admin/Staffrequest";
 import AdminLayout from "./Components/Protected/Admin/Adminlayout";
 import Admindashboard from "./Components/Protected/Admin/AdminDashboard";
+import Staffdashboard from "./Components/Protected/Staffdashboard";
+import Staffrequest from "./Components/Protected/Admin/Staffrequest";
+import Usermanagement from "./Components/Protected/Admin/Usermanagement";
+import Roommanagement from "./Components/Protected/Admin/Roommanagement";
+import Bookingmanagement from "./Components/Protected/Admin/Bookingmanagement";
+import Billing from "./Components/Protected/Admin/Billing";
+import Feedback from "./Components/Protected/Admin/Feedback";
+import Profile from "./Components/Protected/Admin/Profile";
 
-function Layout({ children }) {
+function Layout() {
   const location = useLocation();
   const isAdminRoute = location.pathname.startsWith("/admin-dashboard");
 
   return (
     <>
-      {!isAdminRoute && <Navbar />} {/* Navbar sirf non-admin pages pe show hoga */}
-      {children}
-      {!isAdminRoute && <Footer />} {/* Footer bhi sirf normal pages pe rahega */}
+      {!isAdminRoute && <Navbar />} 
+      <Outlet />
+      {!isAdminRoute && <Footer />} 
     </>
   );
 }
@@ -32,8 +39,12 @@ function Layout({ children }) {
 function App() {
   return (
     <Router>
-      <Layout>
-        <Routes>
+      <Routes>
+       
+        <Route path="/logindashboard" element={<Logindashboard />} />
+        <Route path="/registerdashboard" element={<Registerdashboard />} />
+
+        <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/rooms" element={<Room />} />
@@ -41,17 +52,27 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/logindashboard" element={<Logindashboard />} />
-          <Route path="/registerdashboard" element={<Registerdashboard />} />
-          <Route path="/staff-dashboard" element={<Staffdashboard />} />
+        </Route>
 
-          {/* Admin Routes with Layout */}
+        {/* Protected Admin Routes */}
+        <Route element={<PrivateRoute allowedRoles={["admin"]} />}>
           <Route path="/admin-dashboard" element={<AdminLayout />}>
             <Route index element={<Admindashboard />} />
             <Route path="staff-requests" element={<Staffrequest />} />
+            <Route path="user-managemnt" element={<Usermanagement />} />
+            <Route path="room-managemnt" element={<Roommanagement />} />
+            <Route path="booking-managemnt" element={<Bookingmanagement />} />
+            <Route path="billing-transaction" element={<Billing />} />
+            <Route path="feedback-managemnt" element={<Feedback />} />
+            <Route path="profile" element={<Profile />} />
           </Route>
-        </Routes>
-      </Layout>
+        </Route>
+
+        {/* Protected Staff Routes */}
+        <Route element={<PrivateRoute allowedRoles={["staff"]} />}>
+          <Route path="/staff-dashboard" element={<Staffdashboard />} />
+        </Route>
+      </Routes>
     </Router>
   );
 }

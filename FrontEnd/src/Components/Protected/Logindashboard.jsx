@@ -153,6 +153,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { AuthContext } from "../AuthContext";
+import {jwtDecode} from "jwt-decode";
 
 const Logindashboard = () => {
   const navigate = useNavigate();
@@ -168,30 +169,75 @@ const Logindashboard = () => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value });
   };
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const response = await fetch("http://localhost:2000/api/User/admin/login", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify(credentials),
+  //     });
+
+  //     const data = await response.json();
+  //     console.log("API Response:", data);
+
+  //     if (!response.ok) throw new Error(data.error || "Login failed");
+
+  //     if (data.token) {
+  //       localStorage.setItem("token", data.token);
+  //       handleLogin(data.token);
+  //       toast.success("Login Successful!", { position: "top-center" });
+
+  //       setTimeout(() => {
+  //         if (data.role === "Admin") {
+  //           navigate("/admin-dashboard");
+  //         } else {
+  //           navigate("/staff-dashboard");
+  //         }
+  //       }, 2000);
+  //     } else {
+  //       toast.warning("Unauthorized Role! Redirecting...", { position: "top-center" });
+  //       setTimeout(() => {
+  //         navigate("/");
+  //       }, 2000);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error:", error);
+  //     toast.error("Invalid Credentials. Please try again.", { position: "top-center" });
+  //   }
+  // };
+ // Import jwt-decode
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:2000/api/User/login", {
+      const response = await fetch("http://localhost:2000/api/User/admin/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(credentials),
       });
-
+  
       const data = await response.json();
       console.log("API Response:", data);
-
+  
       if (!response.ok) throw new Error(data.error || "Login failed");
-
+  
       if (data.token) {
         localStorage.setItem("token", data.token);
         handleLogin(data.token);
         toast.success("Login Successful!", { position: "top-center" });
-
+  
+        // ✅ Decode token to extract role
+        const decodedToken = jwtDecode(data.token);
+        console.log("Decoded Token:", decodedToken);
+  
         setTimeout(() => {
-          if (data.role === "Admin") {
+          if (decodedToken.user.role === "Admin") {
             navigate("/admin-dashboard");
-          } else {
+          } else if (decodedToken.user.role === "Staff") {
             navigate("/staff-dashboard");
+          } else {
+            navigate("/"); // Default redirect if role is unexpected
           }
         }, 2000);
       } else {
@@ -205,7 +251,7 @@ const Logindashboard = () => {
       toast.error("Invalid Credentials. Please try again.", { position: "top-center" });
     }
   };
-
+  
   return (
     <Box
       sx={{

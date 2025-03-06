@@ -19,6 +19,7 @@ const RoomSchema = new mongoose.Schema({
         enum: ['Cleaned', 'Pending'], 
         default: 'Cleaned' 
     },
+    image: { type: String, required: true }, // ✅ Added image field (Required when adding)
     createdAt: { type: Date, default: Date.now }
 });
 

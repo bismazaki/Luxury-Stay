@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState ,useContext } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
     Drawer,
     List,
@@ -13,13 +14,25 @@ import {
     Box,
     Container,
 } from "@mui/material";
+import {
+    Dashboard,
+    People,
+    MeetingRoom,
+    Book,
+    Receipt,
+    Feedback,
+    AssignmentInd,
+  } from "@mui/icons-material"; 
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { AuthContext } from "../../AuthContext";
 
 const Sidebar = () => {
     const [open, setOpen] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
+    const {  handleLogout } = useContext(AuthContext);
+    const navigate = useNavigate();
 
     // Sidebar toggle
     const toggleDrawer = () => {
@@ -33,6 +46,10 @@ const Sidebar = () => {
 
     const handleMenuClose = () => {
         setAnchorEl(null);
+    };
+    const handlelogout = () => {
+        handleLogout();
+        navigate('/logindashboard');
     };
 
     return (
@@ -71,10 +88,10 @@ const Sidebar = () => {
 
                         {/* Profile Dropdown Menu */}
                         <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
-                            <MenuItem onClick={handleMenuClose} component={Link} to="/settings">
-                                Settings
+                            <MenuItem onClick={handleMenuClose} component={Link} to="profile">
+                                Show Profile
                             </MenuItem>
-                            <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
+                            <MenuItem onClick={handlelogout}>Logout</MenuItem>
                         </Menu>
                     </Toolbar>
                 </Container>
@@ -92,10 +109,25 @@ const Sidebar = () => {
 
                     <List>
                         <ListItem button onClick={toggleDrawer} component={Link} to="/admin-dashboard">
-                            <ListItemText sx={{color: `white`}} primary="Dashboard" />
+                            <Dashboard sx={{ color: "white" , mx:1 }}/> <ListItemText sx={{color: `white`}} primary="Dashboard" /> 
                         </ListItem>
                         <ListItem button onClick={toggleDrawer} component={Link} to="staff-requests">
-                            <ListItemText sx={{color: `white`}} primary="Staff Requests" />
+                        <AssignmentInd sx={{ color: "white" , mx:1 }}/> <ListItemText sx={{color: `white`}} primary="Staff Requests" />
+                        </ListItem>
+                        <ListItem button onClick={toggleDrawer} component={Link} to="user-managemnt">
+                        <People sx={{ color: "white" , mx:1 }}/> <ListItemText sx={{color: `white`}} primary="User Management" />
+                        </ListItem>
+                        <ListItem button onClick={toggleDrawer} component={Link} to="room-managemnt">
+                        <MeetingRoom sx={{ color: "white" , mx:1 }}/> <ListItemText sx={{color: `white`}} primary="Room Management" />
+                        </ListItem>
+                        <ListItem button onClick={toggleDrawer} component={Link} to="booking-managemnt">
+                        <Book sx={{ color: "white" , mx:1 }}/> <ListItemText sx={{color: `white`}} primary="Booking Management" />
+                        </ListItem>
+                        <ListItem button onClick={toggleDrawer} component={Link} to="billing-transaction">
+                        <Receipt sx={{ color: "white" , mx:1 }}/> <ListItemText sx={{color: `white`}} primary="Billing & Transaction" />
+                        </ListItem>
+                        <ListItem button onClick={toggleDrawer} component={Link} to="feedback-managemnt">
+                        <Feedback sx={{ color: "white" , mx:1 }}/> <ListItemText sx={{color: `white`}} primary="Feedback Management" />
                         </ListItem>
                     </List>
                 </Box>
