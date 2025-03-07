@@ -14,7 +14,7 @@ import Logindashboard from "./Components/Protected/Logindashboard";
 import Registerdashboard from "./Components/Protected/Register";
 import AdminLayout from "./Components/Protected/Admin/Adminlayout";
 import Admindashboard from "./Components/Protected/Admin/AdminDashboard";
-import Staffdashboard from "./Components/Protected/Staffdashboard";
+import Staffdashboard from "./Components/Protected/Staff/Staffdashboard";
 import Staffrequest from "./Components/Protected/Admin/Staffrequest";
 import Usermanagement from "./Components/Protected/Admin/Usermanagement";
 import Roommanagement from "./Components/Protected/Admin/Roommanagement";
@@ -22,6 +22,10 @@ import Bookingmanagement from "./Components/Protected/Admin/Bookingmanagement";
 import Billing from "./Components/Protected/Admin/Billing";
 import Feedback from "./Components/Protected/Admin/Feedback";
 import Profile from "./Components/Protected/Admin/Profile";
+import Stafflayout from "./Components/Protected/Staff/Stafflayout";
+import Roomser from "./Components/Protected/Staff/Roomser";
+import Chckin from "./Components/Protected/Staff/Chckin";
+import Chckout from "./Components/Protected/Staff/Chckout";
 
 function Layout() {
   const location = useLocation();
@@ -70,9 +74,17 @@ function App() {
 
         {/* Protected Staff Routes */}
         <Route element={<PrivateRoute allowedRoles={["staff"]} />}>
-          <Route path="/staff-dashboard" element={<Staffdashboard />} />
-        </Route>
-      </Routes>
+      <Route path="/staff-dashboard" element={<Stafflayout />}>
+        <Route index element={<Staffdashboard />} />
+        <Route path="roomser" element={<Roomser />} />
+        <Route path="chckin" element={<Chckin />} />
+        <Route path="chckout" element={<Chckout />} />
+        <Route path="booking-management" element={<Bookingmanagement />} />
+        <Route path="billing-transaction" element={<Billing />} />
+        <Route path="feedback-management" element={<Feedback />} />
+      </Route>
+    </Route>
+    </Routes>
     </Router>
   );
 }
