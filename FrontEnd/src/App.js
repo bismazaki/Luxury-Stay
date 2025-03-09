@@ -10,6 +10,9 @@ import Contact from "./Components/Contact";
 import Login from "./Components/Login";
 import Register from "./Components/Register";
 import Dashboard from "./Components/Dashboard";
+import ProfileG from "./Components/Profile";
+import Bookinghistory from "./Components/Bookinghistory";
+import Invoice from "./Components/Paymentinvoice";
 import Logindashboard from "./Components/Protected/Logindashboard";
 import Registerdashboard from "./Components/Protected/Register";
 import AdminLayout from "./Components/Protected/Admin/Adminlayout";
@@ -56,6 +59,9 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/profile" element={<ProfileG />} />
+          <Route path="/booking-history" element={<Bookinghistory/>} />
+          <Route path="/payment-invoices" element={<Invoice/>} />
         </Route>
 
         {/* Protected Admin Routes */}

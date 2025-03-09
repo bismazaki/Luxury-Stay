@@ -100,7 +100,11 @@ router.post(
         user: {
           id: user.id,
           name: user.name, // ✅ Frontend ke liye name bhejna
+          email: user.email,
+          phone: user.phoneNumber,
+          address: user.address,
           role: user.role,
+          accountStatus: user.accountStatus
         },
       };
 
@@ -111,6 +115,8 @@ router.post(
         token,
         userId: user.userId,
         name: user.name,
+        phone: user.phoneNumber,
+        address: user.address,
         email: user.email,
         role: user.role,
       });
@@ -122,6 +128,40 @@ router.post(
   }
 );
 
+router.put("/updateProfile", async (req, res) => {
+  const { id, name, email, phoneNumber, address } = req.body;
+
+  try {
+    const user = await User.findByIdAndUpdate(
+      id,
+      { name, email, phoneNumber, address },
+      { new: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Generate a new token with updated user data
+    const payload = {
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        phone: user.phoneNumber,
+        address: user.address,
+        role: user.role,
+        accountStatus: user.accountStatus,
+      },
+    };
+    const newToken = jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });
+
+    res.status(200).json({ success: true, message: "Profile updated successfully", user, token: newToken });
+  } catch (error) {
+    console.error("Update Error:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 
 
 
