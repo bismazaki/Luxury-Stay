@@ -29,6 +29,7 @@ import Stafflayout from "./Components/Protected/Staff/Stafflayout";
 import Roomser from "./Components/Protected/Staff/Roomser";
 import Chckin from "./Components/Protected/Staff/Chckin";
 import Chckout from "./Components/Protected/Staff/Chckout";
+import Booking from "./Components/Booking";
 
 function Layout() {
   const location = useLocation();
@@ -62,6 +63,7 @@ function App() {
           <Route path="/profile" element={<ProfileG />} />
           <Route path="/booking-history" element={<Bookinghistory/>} />
           <Route path="/payment-invoices" element={<Invoice/>} />
+          <Route path="/booking" element={<Booking/>} />
         </Route>
 
         {/* Protected Admin Routes */}
