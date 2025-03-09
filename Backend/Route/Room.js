@@ -254,6 +254,56 @@ router.patch(
 );
 
 
+
+router.patch(
+  "/update-housekeeping/:roomId",
+  [
+    body("taskStatus", "Invalid task status").isIn(["Assigned", "In Progress", "Completed"]),
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+      const room = await Room.findOne({ roomId: req.params.roomId });
+
+      if (!room || !room.housekeepingTask) {
+        return res.status(404).json({ message: "Housekeeping task not found for this room" });
+      }
+
+      room.housekeepingTask.taskStatus = req.body.taskStatus;
+      await room.save();
+
+      res.json({ message: "Housekeeping task status updated!", room });
+    } catch (err) {
+      res.status(500).json({ message: "Error updating housekeeping status", error: err.message });
+    }
+  }
+  
+);
+// Fetch all rooms
+router.get('/house-rooms', async (req, res) => {
+  try {
+      const rooms = await Room.find().populate('assignedHousekeeper', 'name');
+      res.json(rooms);
+  } catch (error) {
+      res.status(500).json({ message: error.message });
+  }
+});
+
+// Fetch all housekeepers
+router.get('/housekeepers', async (req, res) => {
+  try {
+      const housekeepers = await Housekeeper.find();
+      res.json(housekeepers);
+  } catch (error) {
+      res.status(500).json({ message: error.message });
+  }
+});
+
+// Assign housekeeper to a room
 router.post(
   "/assign-housekeeping",
   [
@@ -283,33 +333,6 @@ router.post(
       res.json({ message: "Housekeeping task assigned successfully!", room });
     } catch (err) {
       res.status(500).json({ message: "Error assigning housekeeping task", error: err.message });
-    }
-  }
-);
-router.patch(
-  "/update-housekeeping/:roomId",
-  [
-    body("taskStatus", "Invalid task status").isIn(["Assigned", "In Progress", "Completed"]),
-  ],
-  async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-
-    try {
-      const room = await Room.findOne({ roomId: req.params.roomId });
-
-      if (!room || !room.housekeepingTask) {
-        return res.status(404).json({ message: "Housekeeping task not found for this room" });
-      }
-
-      room.housekeepingTask.taskStatus = req.body.taskStatus;
-      await room.save();
-
-      res.json({ message: "Housekeeping task status updated!", room });
-    } catch (err) {
-      res.status(500).json({ message: "Error updating housekeeping status", error: err.message });
     }
   }
 );
