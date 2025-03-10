@@ -48,7 +48,7 @@ const router = express.Router();
 
 
 router.post(
-    "/booking",
+    "/create-booking",
     [
         body("guestId").notEmpty().isMongoId().withMessage("Invalid guest ID"),
         body("roomId").notEmpty().isMongoId().withMessage("Invalid room ID"),
