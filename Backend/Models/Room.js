@@ -35,6 +35,7 @@ const RoomSchema = new mongoose.Schema({
     housekeepingStatus: { type: String, enum: ['Cleaned', 'Pending'], default: 'Cleaned' },
     assignedHousekeeper: { type: mongoose.Schema.Types.ObjectId, ref: 'Housekeeper', default: null },
     taskStatus: { type: String, enum: ['Assigned', 'In Progress', 'Completed'], default: 'Assigned' },
+    image: { type: String, required: true },
     createdAt: { type: Date, default: Date.now }
 });
 

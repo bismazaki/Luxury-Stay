@@ -30,6 +30,8 @@ import Roomser from "./Components/Protected/Staff/Roomser";
 import Chckin from "./Components/Protected/Staff/Chckin";
 import Chckout from "./Components/Protected/Staff/Chckout";
 import Booking from "./Components/Booking";
+import Checkout from "./Components/Checkout";
+import ConfirmationPage from "./Components/Confirmation";
 
 function Layout() {
   const location = useLocation();
@@ -64,6 +66,8 @@ function App() {
           <Route path="/booking-history" element={<Bookinghistory/>} />
           <Route path="/payment-invoices" element={<Invoice/>} />
           <Route path="/booking" element={<Booking/>} />
+          <Route path="/payment" element={<Checkout/>} />
+          <Route path="/confirmation" element={<ConfirmationPage/>} />
         </Route>
 
         {/* Protected Admin Routes */}
