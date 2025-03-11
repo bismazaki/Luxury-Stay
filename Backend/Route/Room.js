@@ -148,6 +148,14 @@ router.get("/rooms", async (req, res) => {
   }
 });
 
+router.get("/getrooms", async (req, res) => {
+  try {
+    const rooms = await Room.find();
+    res.json(rooms);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 // ✅ Fetch a single room by ID
 router.get("/rooms/:id", async (req, res) => {
   try {

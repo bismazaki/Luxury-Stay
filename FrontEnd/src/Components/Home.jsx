@@ -10,7 +10,7 @@ const Home = () => {
 					<div className="banner_content text-center">
 						<h6>Away from monotonous life</h6>
 						<h2>Relax Your Mind</h2>
-						<p>If you are looking at blank cassettes on the web, you may be very confused at the<br/> difference in price. You may see some for as low as $.17 each.</p>
+						<h4>"Unwind by the poolside and let your worries drift away with the calming ripples of water.<br/> Relax, refresh, and rejuvenate in a serene oasis made just for you."</h4>
 						<a href="/rooms" className="btn theme_btn button_hover">Get Started</a>
 					</div>
 				</div>
@@ -89,7 +89,7 @@ const Home = () => {
             <div className="container">
                 <div className="section_title text-center">
                     <h2 className="title_color">Hotel Accomodation</h2>
-                    <p>We all live in an age that belongs to the young at heart. Life that is becoming extremely fast, </p>
+                    <p>"Experience comfort and luxury with our premium hotel accommodations, designed for a perfect stay." </p>
                 </div>
                 <div className="row mb_30">
                     <div className="col-lg-3 col-sm-6">
@@ -137,21 +137,31 @@ const Home = () => {
         </section>
 
 		<section className="about_history_area section_gap">
-            <div className="container">
-                <div className="row">
-                    <div className="col-md-6 d_flex align-items-center">
-                        <div className="about_content ">
-                            <h2 className="title title_color">About Us <br/>Our History<br/>Mission & Vision</h2>
-                            <p>inappropriate behavior is often laughed off as “boys will be boys,” women face higher conduct standards especially in the workplace. That’s why it’s crucial that, as women, our behavior on the job is beyond reproach. inappropriate behavior is often laughed.</p>
-                            <a href="/" className="button_hover theme_btn_two">Request Custom Price</a>
-                        </div>
-                    </div>
-                    <div className="col-md-6">
-                        <img className="img-fluid" src="/image/about_bg.jpg" alt="img"/>
-                    </div>
+    <div className="container">
+        <div className="row">
+            <div className="col-md-6 d_flex align-items-center">
+                <div className="about_content">
+                    <h2 className="title title_color">About Us <br />Our History<br />Mission & Vision</h2>
+                    <p>
+                        <strong>About Us:</strong>  
+                        "Luxury Stay is dedicated to providing world-class hospitality with exceptional comfort and premium services for a memorable stay."
+                        <br /><br />
+                        <strong>Our Vision:</strong>  
+                        "To redefine luxury hospitality by offering seamless experiences, personalized services, and unparalleled comfort to our guests."
+                        <br /><br />
+                        <strong>Our History:</strong>  
+                        "Founded with a passion for excellence, Luxury Stay has grown into a trusted name in hotel management, ensuring guest satisfaction at every step."
+                    </p>
+                    <a href="/" className="button_hover theme_btn_two">Request Custom Price</a>
                 </div>
             </div>
-        </section>
+            <div className="col-md-6">
+                <img className="img-fluid" src="/image/about_bg.jpg" alt="Luxury Stay" />
+            </div>
+        </div>
+    </div>
+</section>
+    
 
 		<section className="facilities_area section_gap">
             <div className="overlay bg-parallax" data-stellar-ratio="0.8" data-stellar-vertical-offset="0" data-background="">  
