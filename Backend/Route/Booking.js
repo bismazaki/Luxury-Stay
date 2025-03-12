@@ -58,12 +58,26 @@ router.post(
  */
 router.get('/get-booking', async (req, res) => {
     try {
-        const bookings = await Booking.find().populate('guestId', 'name email').populate('roomId', 'roomType');
+        const bookings = await Booking.find()
+            .populate('guestId', 'email')  // Only populate necessary fields
+            .populate('roomId', 'roomType');
+
         res.status(200).json({ bookings });
     } catch (error) {
         res.status(500).json({ message: "Server error", error: error.message });
     }
 });
+
+router.get("/get-booking-d", authMiddleware, async (req, res) => {
+    try {
+        const bookings = await Booking.find().populate("roomId"); // Populate room details
+
+        res.status(200).json({ bookings });
+    } catch (error) {
+        res.status(500).json({ message: "Server error", error: error.message });
+    }
+});
+
 
 /**
  * @route   PUT /api/bookings/:id/cancel
@@ -92,30 +106,78 @@ router.delete('/update/:id/cancel', authMiddleware, async (req, res) => {
         res.status(500).json({ message: "Server error", error: error.message });
     }
 });
+router.delete('/delete/:id/cancel', authMiddleware, async (req, res) => {
+    try {
+        
+        const booking = await Booking.findById(req.params.id);
 
+        if (!booking) {
+            return res.status(404).json({ message: "Booking not found" });
+        }
 
-// router.put('/update/:id/cancel', async (req, res) => {
+        // Delete the booking from the database
+        await Booking.findByIdAndDelete(req.params.id);
+
+        res.status(200).json({ message: "Booking deleted successfully" });
+    } catch (error) {
+        res.status(500).json({ message: "Server error", error: error.message });
+    }
+});
+
+// router.put('/update/:id', authMiddleware, async (req, res) => {
 //     try {
-//         const { checkOutDate, totalAmount } = req.body; // Get updated fields
-
-//         const booking = await Booking.findById(req.params.id);
+//         const { checkInDate, checkOutDate, totalAmount } = req.body;
+//         const booking = await Booking.findById(req.params.id).populate("roomId"); // Updated here
 
 //         if (!booking) {
 //             return res.status(404).json({ message: "Booking not found" });
 //         }
 
-//         // Update the fields only if new values are provided
+//         // Update fields only if new values are provided
+//         if (checkInDate) booking.checkInDate = checkInDate;
 //         if (checkOutDate) booking.checkOutDate = checkOutDate;
 //         if (totalAmount) booking.totalAmount = totalAmount;
 
-//         booking.status = "Cancelled"; // Set status to Cancelled
 //         await booking.save();
 
-//         res.status(200).json({ message: "Booking updated & cancelled successfully", booking });
+//         res.status(200).json({ message: "Booking updated successfully", booking });
 //     } catch (error) {
 //         res.status(500).json({ message: "Server error", error: error.message });
 //     }
 // });
+
+router.put('/update/:id', authMiddleware, async (req, res) => {
+    try {
+        const { checkInDate, checkOutDate } = req.body;
+        const booking = await Booking.findById(req.params.id).populate("roomId", "pricePerNight")
+
+        if (!booking) {
+            return res.status(404).json({ message: "Booking not found" });
+        }
+
+        if (checkInDate) booking.checkInDate = checkInDate;
+        if (checkOutDate) booking.checkOutDate = checkOutDate;
+
+        // Ensure room has a price per night
+        if (!booking.roomId || !booking.roomId.pricePerNight) {
+            return res.status(400).json({ message: "Room price not found" });
+        }
+
+        const pricePerNight = booking.roomId.pricePerNight;
+        const checkIn = new Date(booking.checkInDate);
+        const checkOut = new Date(booking.checkOutDate);
+
+        const nights = Math.max(1, (checkOut - checkIn) / (1000 * 3600 * 24)); // Minimum 1 night charge
+        booking.totalAmount = nights * pricePerNight; // Update total price dynamically
+
+        await booking.save();
+
+        res.status(200).json({ message: "Booking updated successfully", booking });
+    } catch (error) {
+        res.status(500).json({ message: "Server error", error: error.message });
+    }
+});
+
 
 router.get('/booking-history', authMiddleware, async (req, res) => {
     try {
