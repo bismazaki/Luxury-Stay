@@ -77,13 +77,78 @@ router.get("/get-booking-d", authMiddleware, async (req, res) => {
         res.status(500).json({ message: "Server error", error: error.message });
     }
 });
-
+// router.put("/:id/check-in", async (req, res) => {
+//     try {
+//         const booking = await Booking.findById(req.params.id);
+//         if (!booking) {
+//             return res.status(404).json({ message: "Booking not found" });
+//         }
+//         if (booking.status !== "Confirmed") {
+//             return res.status(400).json({ message: "Booking is not in a confirmable state" });
+//         }
+//         booking.status = "Checked-In";
+//         await booking.save();
+//         res.status(200).json({ message: "Guest checked in successfully", booking });
+//     } catch (error) {
+//         res.status(500).json({ message: "Server error", error: error.message });
+//     }
+// });
+// router.put("/:id/check-out", async (req, res) => {
+//     try {
+//         const booking = await Booking.findById(req.params.id);
+//         if (!booking) {
+//             return res.status(404).json({ message: "Booking not found" });
+//         }
+//         if (booking.status !== "Checked-In") {
+//             return res.status(400).json({ message: "Guest is not checked in" });
+//         }
+//         booking.status = "Checked-Out";
+//         await booking.save();
+//         res.status(200).json({ message: "Guest checked out successfully", booking });
+//     } catch (error) {
+//         res.status(500).json({ message: "Server error", error: error.message });
+//     }
+// });
 
 /**
  * @route   PUT /api/bookings/:id/cancel
  * @desc    Cancel a booking
  * @access  Public
  */
+
+router.put("/:id/check-in", async (req, res) => {
+    try {
+        const booking = await Booking.findById(req.params.id);
+        if (!booking) {
+            return res.status(404).json({ message: "Booking not found" });
+        }
+        if (booking.status !== "Confirmed") {
+            return res.status(400).json({ message: "Booking is not in a confirmable state" });
+        }
+        booking.status = "Checked-In";
+        await booking.save();
+        res.status(200).json({ message: "Guest checked in successfully", booking });
+    } catch (error) {
+        res.status(500).json({ message: "Server error", error: error.message });
+    }
+});
+
+router.put("/:id/check-out", async (req, res) => {
+    try {
+        const booking = await Booking.findById(req.params.id);
+        if (!booking) {
+            return res.status(404).json({ message: "Booking not found" });
+        }
+        if (booking.status !== "Checked-In") {
+            return res.status(400).json({ message: "Guest is not checked in" });
+        }
+        booking.status = "Checked-Out";
+        await booking.save();
+        res.status(200).json({ message: "Guest checked out successfully", booking });
+    } catch (error) {
+        res.status(500).json({ message: "Server error", error: error.message });
+    }
+});
 router.delete('/update/:id/cancel', authMiddleware, async (req, res) => {
     try {
         const guestId = req.user.id; // Logged-in user's ID

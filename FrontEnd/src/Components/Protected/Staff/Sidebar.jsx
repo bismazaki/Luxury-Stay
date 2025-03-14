@@ -88,7 +88,7 @@ const Sidebar = () => {
 
                         {/* Profile Dropdown Menu */}
                         <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
-                            <MenuItem onClick={handleMenuClose} component={Link} to="profile">
+                            <MenuItem onClick={handleMenuClose} component={Link} to="staffprofile">
                                 Show Profile
                             </MenuItem>
                             <MenuItem onClick={handlelogout}>Logout</MenuItem>
@@ -117,18 +117,17 @@ const Sidebar = () => {
                         <ListItem button onClick={toggleDrawer} component={Link} to="chckin">
                         <People sx={{ color: "white" , mx:1 }}/> <ListItemText sx={{color: `white`}} primary="Guest Check-Inn" />
                         </ListItem>
-                        <ListItem button onClick={toggleDrawer} component={Link} to="chckout">
-                        <MeetingRoom sx={{ color: "white" , mx:1 }}/> <ListItemText sx={{color: `white`}} primary="Guest Check-out" />
+                        
+                        <ListItem button onClick={toggleDrawer} component={Link} to="Bookingmanagement">
+                        <Book sx={{ color: "white" , mx:1 }}/> <ListItemText sx={{color: `white`}} primary="Booking History" />
                         </ListItem>
-                        <ListItem button onClick={toggleDrawer} component={Link} to="booking-managemnt">
-                        <Book sx={{ color: "white" , mx:1 }}/> <ListItemText sx={{color: `white`}} primary="Booking Management" />
+                        <ListItem button onClick={toggleDrawer} component={Link} to="staffroom">
+                        <Book sx={{ color: "white" , mx:1 }}/> <ListItemText sx={{color: `white`}} primary="Rooms" />
                         </ListItem>
                         <ListItem button onClick={toggleDrawer} component={Link} to="billing-transaction">
                         <Receipt sx={{ color: "white" , mx:1 }}/> <ListItemText sx={{color: `white`}} primary="Billing & Transaction" />
                         </ListItem>
-                        <ListItem button onClick={toggleDrawer} component={Link} to="feedback-managemnt">
-                        <Feedback sx={{ color: "white" , mx:1 }}/> <ListItemText sx={{color: `white`}} primary="Feedback Management" />
-                        </ListItem>
+
                     </List>
                 </Box>
             </Drawer>

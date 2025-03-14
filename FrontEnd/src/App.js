@@ -28,10 +28,16 @@ import Profile from "./Components/Protected/Admin/Profile";
 import Stafflayout from "./Components/Protected/Staff/Stafflayout";
 import Roomser from "./Components/Protected/Staff/Roomser";
 import Chckin from "./Components/Protected/Staff/Chckin";
-import Chckout from "./Components/Protected/Staff/Chckout";
 import Booking from "./Components/Booking";
 import Checkout from "./Components/Checkout";
 import ConfirmationPage from "./Components/Confirmation";
+import CreateBooking from "./Components/Protected/Staff/CreateBooking";
+import BookingHistory from "./Components/Protected/Staff/Bookinghistory";
+import StaffRooms from "./Components/Protected/Staff/Staffrooms";
+import Staffcheckout from "./Components/Protected/Staff/Staffcheckout";
+import Staffconfirmation from "./Components/Protected/Staff/Staffconfirmation";
+import Staffmanagement from "./Components/Protected/Staff/Bookinghistory";
+import Staffprofile from "./Components/Protected/Staff/Staffprofile";
 
 function Layout() {
   const location = useLocation();
@@ -42,6 +48,7 @@ function Layout() {
       {!isAdminRoute && <Navbar />} 
       <Outlet />
       {!isAdminRoute && <Footer />} 
+      
     </>
   );
 }
@@ -86,16 +93,23 @@ function App() {
 
         {/* Protected Staff Routes */}
         <Route element={<PrivateRoute allowedRoles={["staff"]} />}>
-      <Route path="/staff-dashboard" element={<Stafflayout />}>
-        <Route index element={<Staffdashboard />} />
-        <Route path="roomser" element={<Roomser />} />
-        <Route path="chckin" element={<Chckin />} />
-        <Route path="chckout" element={<Chckout />} />
-        <Route path="booking-management" element={<Bookingmanagement />} />
-        <Route path="billing-transaction" element={<Billing />} />
-        <Route path="feedback-management" element={<Feedback />} />
-      </Route>
-    </Route>
+  <Route path="/staff-dashboard" element={<Stafflayout />}>
+    <Route index element={<Staffdashboard />} />
+    <Route path="roomser" element={<Roomser />} />
+    <Route path="chckin" element={<Chckin />} />
+    <Route path="booking-management" element={<Staffmanagement/>} />
+    <Route path="billing-transaction" element={<Billing />} />
+    <Route path="feedback-management" element={<Feedback />} />
+    <Route path="CreateBooking" element={<CreateBooking />} /> {/* Correct route */}
+    <Route path="Bookingmanagement" element={<BookingHistory/>} />
+    <Route path="staffroom" element={<StaffRooms />} />
+    <Route path="staffcheckout" element={<Staffcheckout/>}/>
+    <Route path="staffconfirmation" element={<Staffconfirmation/>}/>
+    <Route path="staffprofile" element={<Staffprofile/>}/>
+
+  </Route>
+</Route>
+  
     </Routes>
     </Router>
   );
