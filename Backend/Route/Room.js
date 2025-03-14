@@ -169,7 +169,7 @@ router.get("/rooms/:id", async (req, res) => {
 
 // ✅ Add a new room (Image Field Required)
 router.post(
-  "/rooms",
+  "/addroom",
   [
     body("roomId", "Room ID is required").notEmpty(),
     body("roomType", "Invalid room type").isIn(["Single", "Double", "Suite", "Deluxe"]),
