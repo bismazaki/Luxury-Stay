@@ -2,6 +2,7 @@ const express = require('express');
 const { body, validationResult } = require('express-validator');
 const Booking = require('../Models/Booking');
 const authMiddleware = require("../Middleware/authmiddleware");
+const Room = require('../Models/Room');
 const router = express.Router();
 
 /**
@@ -189,6 +190,51 @@ router.delete('/delete/:id/cancel', authMiddleware, async (req, res) => {
     }
 });
 
+
+router.put('/update/:id', authMiddleware, async (req, res) => {
+    try {
+        const { checkInDate, checkOutDate } = req.body;
+        const booking = await Booking.findById(req.params.id);
+
+        if (!booking) {
+            return res.status(404).json({ message: "Booking not found" });
+        }
+
+        // ✅ Room find manually using roomId (string)
+        const room = await Room.findOne({ roomId: booking.roomId });
+        if (!room || !room.pricePerNight) {
+            return res.status(400).json({ message: "Room price not found" });
+        }
+
+        const pricePerNight = room.pricePerNight;
+
+        // ✅ Update check-in/check-out date if provided
+        if (checkInDate) booking.checkInDate = new Date(checkInDate);
+        if (checkOutDate) booking.checkOutDate = new Date(checkOutDate);
+
+        const checkIn = new Date(booking.checkInDate);
+        const checkOut = new Date(booking.checkOutDate);
+
+        if (checkOut <= checkIn) {
+            return res.status(400).json({ message: "Check-out date must be after check-in date" });
+        }
+
+        // ✅ Calculate total amount
+        const nights = Math.max(1, (checkOut - checkIn) / (1000 * 3600 * 24));
+        booking.totalAmount = nights * pricePerNight;
+
+        await booking.save();
+
+        res.status(200).json({ 
+            message: "Booking updated successfully", 
+            booking: { ...booking._doc, pricePerNight } 
+        });
+    } catch (error) {
+        res.status(500).json({ message: "Server error", error: error.message });
+    }
+});
+
+
 // router.put('/update/:id', authMiddleware, async (req, res) => {
 //     try {
 //         const { checkInDate, checkOutDate, totalAmount } = req.body;
@@ -211,37 +257,39 @@ router.delete('/delete/:id/cancel', authMiddleware, async (req, res) => {
 //     }
 // });
 
-router.put('/update/:id', authMiddleware, async (req, res) => {
-    try {
-        const { checkInDate, checkOutDate } = req.body;
-        const booking = await Booking.findById(req.params.id).populate("roomId", "pricePerNight")
+// router.put('/update/:id', authMiddleware, async (req, res) => {
+//     try {
+//         const { checkInDate, checkOutDate } = req.body;
+//         const booking = await Booking.findById(req.params.id).populate("roomId", "pricePerNight");
 
-        if (!booking) {
-            return res.status(404).json({ message: "Booking not found" });
-        }
+//         if (!booking) {
+//             return res.status(404).json({ message: "Booking not found" });
+//         }
 
-        if (checkInDate) booking.checkInDate = checkInDate;
-        if (checkOutDate) booking.checkOutDate = checkOutDate;
+//         if (checkInDate) booking.checkInDate = checkInDate;
+//         if (checkOutDate) booking.checkOutDate = checkOutDate;
 
-        // Ensure room has a price per night
-        if (!booking.roomId || !booking.roomId.pricePerNight) {
-            return res.status(400).json({ message: "Room price not found" });
-        }
+//         if (!booking.roomId || !booking.roomId.pricePerNight) {
+//             return res.status(400).json({ message: "Room price not found" });
+//         }
 
-        const pricePerNight = booking.roomId.pricePerNight;
-        const checkIn = new Date(booking.checkInDate);
-        const checkOut = new Date(booking.checkOutDate);
+//         const pricePerNight = booking.roomId.pricePerNight;
+//         const checkIn = new Date(booking.checkInDate);
+//         const checkOut = new Date(booking.checkOutDate);
+//         const nights = Math.max(1, (checkOut - checkIn) / (1000 * 3600 * 24));
 
-        const nights = Math.max(1, (checkOut - checkIn) / (1000 * 3600 * 24)); // Minimum 1 night charge
-        booking.totalAmount = nights * pricePerNight; // Update total price dynamically
+//         booking.totalAmount = nights * pricePerNight;
+//         await booking.save();
 
-        await booking.save();
+//         res.status(200).json({ 
+//             message: "Booking updated successfully", 
+//             booking: { ...booking._doc, pricePerNight } // ✅ Return correct price
+//         });
+//     } catch (error) {
+//         res.status(500).json({ message: "Server error", error: error.message });
+//     }
+// });
 
-        res.status(200).json({ message: "Booking updated successfully", booking });
-    } catch (error) {
-        res.status(500).json({ message: "Server error", error: error.message });
-    }
-});
 
 
 router.get('/booking-history', authMiddleware, async (req, res) => {

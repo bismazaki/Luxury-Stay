@@ -60,7 +60,7 @@ const BillingManagement = () => {
                         <TableHead sx={{ backgroundColor: "#1976d2" }}>
                             <TableRow>
                                 <TableCell sx={{ color: "white", fontWeight: "bold" }}>Invoice ID</TableCell>
-                                {/* <TableCell sx={{ color: "white", fontWeight: "bold" }}>Guest Name</TableCell> */}
+                                <TableCell sx={{ color: "white", fontWeight: "bold" }}>Guest Name</TableCell>
                                 <TableCell sx={{ color: "white", fontWeight: "bold" }}>Total Amount</TableCell>
                                 <TableCell sx={{ color: "white", fontWeight: "bold" }}>Payment Mode</TableCell>
                                 <TableCell sx={{ color: "white", fontWeight: "bold" }}>Download</TableCell>

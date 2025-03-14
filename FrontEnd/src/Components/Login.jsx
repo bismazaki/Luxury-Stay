@@ -30,6 +30,41 @@ const Login = () => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value });
   };
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const response = await fetch("http://localhost:2000/api/User/login", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify(credentials),
+  //     });
+  
+  //     const data = await response.json();
+  //     console.log("API Response:", data);
+  
+  //     if (!response.ok) throw new Error(data.error || "Login failed");
+  
+  //     if (data.token) {
+  //       localStorage.setItem("token", data.token);
+  //       handleLogin(data.token); // ✅ Token Save Karein
+  //       toast.success("Login Successful!", { position: "top-center" });
+  
+  //       setTimeout(() => {
+  //         navigate("/");
+  //       }, 2000);
+  //     } else {
+  //       toast.warning("Unauthorized Role! Redirecting...", { position: "top-center" });
+  //       setTimeout(() => {
+  //         navigate("/");
+  //       }, 2000);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error:", error);
+  //     toast.error("Invalid Credentials. Please try again.", { position: "top-center" });
+  //   }
+  // };
+  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -45,18 +80,23 @@ const Login = () => {
       if (!response.ok) throw new Error(data.error || "Login failed");
   
       if (data.token) {
-        localStorage.setItem("token", data.token);
-        handleLogin(data.token); // ✅ Token Save Karein
-        toast.success("Login Successful!", { position: "top-center" });
+        // ✅ Role validation
+        if (data.role === "Guest") {
+          localStorage.setItem("token", data.token);
+          handleLogin(data.token); 
+          toast.success("Login Successful!", { position: "top-center" });
   
-        setTimeout(() => {
-          navigate("/");
-        }, 2000);
+          setTimeout(() => {
+            navigate("/");
+          }, 2000);
+        } else {
+          toast.warning("Unauthorized Role! Only Guests are allowed.", { position: "top-center" });
+          setTimeout(() => {
+            navigate("/login"); // 👈 Unauthorized users ko wapis login page pe bhejo
+          }, 2000);
+        }
       } else {
-        toast.warning("Unauthorized Role! Redirecting...", { position: "top-center" });
-        setTimeout(() => {
-          navigate("/");
-        }, 2000);
+        toast.error("Invalid Credentials. Please try again.", { position: "top-center" });
       }
     } catch (error) {
       console.error("Error:", error);

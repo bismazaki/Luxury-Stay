@@ -24,65 +24,21 @@ const BookingManagement = () => {
         }
     };
 
-    // const handleEditClick = (booking) => {
-    //     setSelectedBooking({
-    //         ...booking,
-    //         checkInDate: booking.checkInDate.split("T")[0],  // Ensure correct date format
-    //         checkOutDate: booking.checkOutDate.split("T")[0],
-    //     });
-    //     setOpenEdit(true);
-    // };
 
-    // // Function to calculate the total amount dynamically
-    // const calculateTotalAmount = (checkIn, checkOut, pricePerNight) => {
-    //     if (!checkIn || !checkOut) return 0;
-
-    //     const checkInDate = new Date(checkIn);
-    //     const checkOutDate = new Date(checkOut);
-    //     const nights = Math.max(1, (checkOutDate - checkInDate) / (1000 * 3600 * 24)); // At least 1 night charge
-
-    //     return nights * pricePerNight;
-    // };
-
-
-    // const handleDateChange = (e, field) => {
-    //     const value = e.target.value;
-    //     const updatedBooking = { ...selectedBooking, [field]: value };
-
-    //     if (updatedBooking.checkInDate && updatedBooking.checkOutDate) {
-    //         updatedBooking.totalAmount = calculateTotalAmount(
-    //             updatedBooking.checkInDate,
-    //             updatedBooking.checkOutDate,
-    //             selectedBooking.roomId?.pricePerNight || 100
-    //         );
-    //     }
-
-    //     setSelectedBooking(updatedBooking);
-    // };
-
-//     const handleEditClick = (booking) => {
-//     setSelectedBooking({
-//         ...booking,
-//         checkInDate: booking.checkInDate.split("T")[0],  // Ensure correct date format
-//         checkOutDate: booking.checkOutDate.split("T")[0],
-//         pricePerNight: booking.roomId?.pricePerNight || 100, // Ensure correct price
-//     });
-//     setOpenEdit(true);
-// };
-
-const handleEditClick = (booking) => {
-  console.log("Selected Booking:", booking);
-  console.log("Room Details:", booking.roomId);
-
-  setSelectedBooking({
-      ...booking,
-      checkInDate: booking.checkInDate.split("T")[0],  // Ensure correct date format
-      checkOutDate: booking.checkOutDate.split("T")[0],
-      pricePerNight: booking.roomId?.pricePerNight || 100, // Set default if undefined
-  });
-
-  setOpenEdit(true);
-};
+    const handleEditClick = (booking) => {
+        console.log("Selected Booking:", booking);
+        console.log("Room Details:", booking.roomId);
+    
+        setSelectedBooking({
+            ...booking,
+            checkInDate: booking.checkInDate.split("T")[0],  
+            checkOutDate: booking.checkOutDate.split("T")[0],
+            pricePerNight: booking.roomId?.pricePerNight || 0, // ✅ Actual price set karo
+        });
+    
+        setOpenEdit(true);
+    };
+    
 
 
 // Function to calculate the total amount dynamically
@@ -95,82 +51,48 @@ const calculateTotalAmount = (checkIn, checkOut, pricePerNight) => {
 
   return nights * pricePerNight;
 };
-
-
-// const handleDateChange = (e, field) => {
-//     const value = e.target.value;
-//     const updatedBooking = { ...selectedBooking, [field]: value };
-
-//     if (updatedBooking.checkInDate && updatedBooking.checkOutDate) {
-//         updatedBooking.totalAmount = calculateTotalAmount(
-//             updatedBooking.checkInDate,
-//             updatedBooking.checkOutDate,
-//             updatedBooking.pricePerNight // Now using the correctly set price
-//         );
-//     }
-
-//     setSelectedBooking(updatedBooking);
-// };
 const handleDateChange = (e, field) => {
-  const value = e.target.value;
-  const updatedBooking = { ...selectedBooking, [field]: value };
+    const value = e.target.value;
+    const updatedBooking = { ...selectedBooking, [field]: value };
 
-  if (updatedBooking.checkInDate && updatedBooking.checkOutDate) {
-      updatedBooking.totalAmount = calculateTotalAmount(
-          updatedBooking.checkInDate,
-          updatedBooking.checkOutDate,
-          updatedBooking.roomId?.pricePerNight || 100 // Ensure price is fetched from room schema
-      );
-  }
+    if (updatedBooking.checkInDate && updatedBooking.checkOutDate) {
+        updatedBooking.totalAmount = calculateTotalAmount(
+            updatedBooking.checkInDate,
+            updatedBooking.checkOutDate,
+            updatedBooking.pricePerNight // ✅ Ensure correct price
+        );
+    }
 
-  setSelectedBooking(updatedBooking);
+    setSelectedBooking(updatedBooking);
 };
 
-    // const handleEditSave = async () => {
-    //     const token = localStorage.getItem("token_admin");
-    //     if (!token) {
-    //         console.error("No token found");
-    //         return;
-    //     }
 
-    //     try {
-    //         await axios.put(
-    //             `http://localhost:2000/api/booking/update/${selectedBooking._id}`,
-    //             selectedBooking,
-    //             { headers: { Authorization: `Bearer ${token}` } }
-    //         );
-           
-        
-         
-    //         fetchBookings();
-    //         setOpenEdit(false);
-    //     } catch (error) {
-    //         console.error("Error updating booking", error);
-    //     }
-    // };
+  
+const handleEditSave = async () => {
+    const token = localStorage.getItem("token_admin");
+    if (!token) {
+        console.error("No token found");
+        return;
+    }
 
-    const handleEditSave = async () => {
-      const token = localStorage.getItem("token_admin");
-      if (!token) {
-          console.error("No token found");
-          return;
-      }
-  
-      try {
-          const response = await axios.put(
-              `http://localhost:2000/api/booking/update/${selectedBooking._id}`,
-              selectedBooking,
-              { headers: { Authorization: `Bearer ${token}` } }
-          );
-  
-          console.log("Updated Booking Response:", response.data); // Yahan console log add kiya
-  
-          fetchBookings(); 
-          setOpenEdit(false);
-      } catch (error) {
-          console.error("Error updating booking", error.response?.data || error.message);
-      }
-  };
+    try {
+        const response = await axios.put(
+            `http://localhost:2000/api/booking/update/${selectedBooking._id}`,
+            {
+                checkInDate: selectedBooking.checkInDate,
+                checkOutDate: selectedBooking.checkOutDate
+            },
+            { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        console.log("Updated Booking Response:", response.data);
+        fetchBookings(); 
+        setOpenEdit(false);
+    } catch (error) {
+        console.error("Error updating booking", error.response?.data || error.message);
+    }
+};
+
   
     const handleCancelBooking = async (id) => {
         const token = localStorage.getItem("token_admin");
