@@ -6,7 +6,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 const ConfirmationPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { InvoiceId, GuestId, Guestname, BookingId, ServiceCharges, TotalAmount, PaymentMode, InvoiceDate } =
+  const { InvoiceId, GuestId, guestName, BookingId, ServiceCharges, TotalAmount, PaymentMode, InvoiceDate } =
     location.state || {};
 
   return (
@@ -31,7 +31,7 @@ const ConfirmationPage = () => {
             </Grid>
             <Grid item xs={12}>
               <Typography variant="h6">
-                <strong>Guest Name:</strong> {Guestname}
+                <strong>Guest Name:</strong> {guestName}
               </Typography>
             </Grid>
             <Grid item xs={12}>

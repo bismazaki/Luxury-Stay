@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Container, Typography, CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
+import { Container, Typography, CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from "@mui/material";
+import { Download } from "@mui/icons-material";
 
 const InvoiceHistory = () => {
   const [invoices, setInvoices] = useState([]);
@@ -23,7 +24,27 @@ const InvoiceHistory = () => {
 
     fetchInvoices();
   }, [token]);
+  const downloadInvoice = async (invoiceId) => {
+    if (!invoiceId) {
+        console.error("Invalid Invoice ID");
+        return;
+    }
 
+    try {
+        const response = await axios.get(`http://localhost:2000/api/billing/invoice/download/${invoiceId}`, {
+            responseType: "blob",
+        });
+
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", `invoice-${invoiceId}.pdf`);
+        document.body.appendChild(link);
+        link.click();
+    } catch (error) {
+        console.error("Error downloading invoice:", error.response ? error.response.data : error.message);
+    }
+};
   return (
     <Container maxWidth="md" sx={{ mt: 4 }}>
       <Typography variant="h4" gutterBottom align="center">
@@ -44,6 +65,7 @@ const InvoiceHistory = () => {
                 <TableCell><strong>Invoice ID</strong></TableCell>
                 <TableCell><strong>Total Amount</strong></TableCell>
                 <TableCell><strong>Payment Mode</strong></TableCell>
+                <TableCell><strong>Dowmload</strong></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -52,6 +74,16 @@ const InvoiceHistory = () => {
                   <TableCell>{invoice.InvoiceId}</TableCell>
                   <TableCell>${invoice.TotalAmount}</TableCell>
                   <TableCell>{invoice.PaymentMode}</TableCell>
+                  <TableCell>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      startIcon={<Download />}
+                      onClick={() => downloadInvoice(invoice._id)}
+                    >
+                      Download
+                    </Button>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>

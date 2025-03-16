@@ -70,7 +70,7 @@ const BillingManagement = () => {
                             {payments.map((payment) => (
                                 <TableRow key={payment._id} hover>
                                     <TableCell>{payment.InvoiceId}</TableCell>
-                                    {/* <TableCell>{payment.GuestId?.name || "N/A"}</TableCell> */}
+                                    <TableCell>{payment.GuestId?.name || "N/A"}</TableCell>
                                     <TableCell>${payment.TotalAmount}</TableCell>
                                     <TableCell>{payment.PaymentMode}</TableCell>
                                     <TableCell>

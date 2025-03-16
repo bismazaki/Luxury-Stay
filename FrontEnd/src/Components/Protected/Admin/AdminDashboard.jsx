@@ -51,7 +51,7 @@ const Admindashboard = () => {
   return (
     <Container maxWidth="lg">
       {/* Dashboard Title */}
-      <Typography variant="h2" sx={{ textAlign: "center",fontFamily: 'serif', fontWeight: "bold", mt: 4, mb: 4 }}>
+      <Typography variant="h2" sx={{ textAlign: "center",fontFamily: 'serif', fontWeight: "bold", mt: 1, mb: 2 }}>
         Admin Dashboard
       </Typography>
 

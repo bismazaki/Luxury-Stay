@@ -23,23 +23,22 @@ const BookingManagement = () => {
             console.error("Error fetching bookings", error);
         }
     };
-
-
     const handleEditClick = (booking) => {
         console.log("Selected Booking:", booking);
         console.log("Room Details:", booking.roomId);
+        
+        const pricePerNight = booking.roomId?.pricePerNight || 0;  // ✅ Ensure correct price
     
         setSelectedBooking({
             ...booking,
             checkInDate: booking.checkInDate.split("T")[0],  
             checkOutDate: booking.checkOutDate.split("T")[0],
-            pricePerNight: booking.roomId?.pricePerNight || 0, // ✅ Actual price set karo
+            pricePerNight: pricePerNight,
         });
     
         setOpenEdit(true);
     };
     
-
 
 // Function to calculate the total amount dynamically
 const calculateTotalAmount = (checkIn, checkOut, pricePerNight) => {
@@ -80,7 +79,8 @@ const handleEditSave = async () => {
             `http://localhost:2000/api/booking/update/${selectedBooking._id}`,
             {
                 checkInDate: selectedBooking.checkInDate,
-                checkOutDate: selectedBooking.checkOutDate
+                checkOutDate: selectedBooking.checkOutDate,
+                pricePerNight: selectedBooking.pricePerNight
             },
             { headers: { Authorization: `Bearer ${token}` } }
         );
